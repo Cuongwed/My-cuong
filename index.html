@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Web Âm Nhạc</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #4CAF50; /* Nền màu xanh */
+            color: white; /* Màu chữ trắng */
+            position: relative; /* Để định vị các dòng chữ */
+        }
+        header {
+            background-color: #2e7d32; /* Màu tối hơn cho header */
+            text-align: center;
+            padding: 1em 0;
+        }
+        nav {
+            margin: 1em 0;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: white;
+        }
+        .search-container {
+            float: right;
+            margin-top: 10px;
+            position: relative;
+        }
+        .search-container input[type="text"] {
+            padding: 5px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .search-container input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-container input[type="submit"]:hover {
+            background-color: #e0e0e0;
+        }
+        .suggestions {
+            position: absolute;
+            background-color: white;
+            color: black;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+            z-index: 1;
+            display: none; /* Ẩn danh sách gợi ý */
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+        section {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 10px auto;
+            max-width: 600px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .music-notes {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .music-notes img {
+            width: 30px; /* Độ rộng nốt nhạc */
+            margin: 0 5px; /* Khoảng cách giữa các nốt nhạc */
+        }
+        .sound-list, .song-list, .artist-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            display: none; /* Ẩn danh sách âm thanh và bài hát ban đầu */
+        }
+        .floating-text {
+            position: absolute;
+            font-size: 20px; /* Kích thước chữ */
+            font-weight: bold; /* In đậm chữ */
+            white-space: nowrap; /* Để dòng chữ không tự xuống dòng */
+            pointer-events: none; /* Không cho phép tương tác với dòng chữ */
+        }
+    </style>
+</head>
+<body onload="playMusic()">
+    <audio id="background-music" autoplay loop>
+        <source src="dung-lam-trai-tim-anh-dau.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát nhạc.
+    </audio>
+    <header>
+        <h1>Chào Mừng Đến Với Trang Web Âm Nhạc</h1>
+    </header>
+    <nav>
+        <a href="#home" onclick="showSection('home')">Trang Chủ</a>
+        <a href="#sounds" onclick="showSection('sounds')">Âm Thanh</a>
+        <a href="#songs" onclick="showSection('songs')">Bài Hát</a>
+        <a href="#artists" onclick="showSection('artists')">Thông Tin Ca Sĩ</a>
+        <div class="search-container">
+            <form onsubmit="return false;">
+                <input type="text" placeholder="Bạn muốn tìm kiếm gì?" id="search-input" onfocus="showSuggestions()" onblur="hideSuggestions()">
+                <input type="submit" value="Tìm" onclick="handleSearch()">
+                <div class="suggestions" id="suggestions">
+                    <div onclick="selectSuggestion('Âm thanh')">Âm thanh</div>
+                    <div onclick="selectSuggestion('Bài hát')">Bài hát</div>
+                    <div onclick="selectSuggestion('Lyric')">Lyric</div>
+                    <div onclick="selectSuggestion('Tìm kiếm về thông tin ca sĩ')">Tìm kiếm về thông tin ca sĩ</div>
+                </div>
+            </form>
+        </div>
+    </nav>
+
+    <section id="home">
+        <h2>Trang Chủ</h2>
+        <p>Đây là phần nội dung chính của trang web.</p>
+    </section>
+
+    <section id="sounds" class="sound-list">
+        <h2>Âm Thanh</h2>
+        <ol>
+            <li>Âm thanh giọt nước</li>
+            <li>Âm thanh con mèo</li>
+            <li>Âm thanh con chó</li>
+            <li>Âm thanh tiếng chim hót</li>
+            <li>Âm thanh tiếng gió</li>
+            <li>Âm thanh tiếng sóng biển</li>
+            <li>Âm thanh tiếng xe cộ</li>
+            <li>Âm thanh tiếng trẻ em cười</li>
+            <li>Âm thanh tiếng mưa</li>
+            <li>Âm thanh tiếng thác nước</li>
+            <li>Âm thanh tiếng chuông</li>
+            <li>Âm thanh tiếng kêu của cú</li>
+            <li>Âm thanh tiếng xe lửa</li>
+            <li>Âm thanh tiếng động cơ máy bay</li>
+            <li>Âm thanh tiếng gọi của gà trống</li>
+            <li>Âm thanh tiếng côn trùng</li>
+            <li>Âm thanh tiếng người cười</li>
+            <li>Âm thanh tiếng súng bắn</li>
+            <li>Âm thanh tiếng cười khúc khích</li>
+            <li>Âm thanh tiếng bấm chuông</li>
+            <li>Âm thanh tiếng nhạc cụ</li>
+        </ol>
+    </section>
+
+    <section id="songs" class="song-list">
+        <h2>Bài Hát</h2>
+        <ol>
+            <li>Đừng làm trái tim anh đau - Sơn Tùng M-TP</li>
+            <li>Cơn mưa ngang qua - Sơn Tùng M-TP</li>
+            <li>Chạy ngay đi - Sơn Tùng M-TP</li>
+            <li>Chúng ta không thuộc về nhau - Sơn Tùng M-TP</li>
+            <li>Lạc trôi - Sơn Tùng M-TP</li>
+            <li>Hãy trao cho anh - Sơn Tùng M-TP</li>
+            <li>Em của ngày hôm qua - Soobin Hoàng Sơn</li>
+            <li>Người lạ ơi - Karik ft. Orange</li>
+            <li>Chạy ngay đi - Đen Vâu</li>
+            <li>Đi để trở về - Soobin Hoàng Sơn</li>
+            <li>Rời bỏ - Hòa Minzy</li>
+            <li>Yêu một người vô tâm - Nelly</li>
+            <li>Hương đêm bay xa - Đoàn Thế Lộc</li>
+            <li>Chỉ cần em hạnh phúc -
